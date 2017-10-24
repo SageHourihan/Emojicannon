@@ -1,0 +1,86 @@
+
+<html>
+ <head>
+<title>Emoji Cannon</title>
+	 <script src="https://www.gstatic.com/firebasejs/4.6.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyD9EM_fISUkeXosFXykkON-d4IJXEB3l64",
+    authDomain: "emoji-cannon.firebaseapp.com",
+    databaseURL: "https://emoji-cannon.firebaseio.com",
+    projectId: "emoji-cannon",
+    storageBucket: "",
+    messagingSenderId: "899733400235"
+  };
+  firebase.initializeApp(config);
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
+<style>
+body {
+  background: #11100c;
+}
+   </style>
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/examples/vendor/aframe/build/aframe.min.js"></script>
+<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css">
+   <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+     <script>
+  var bleep = new Audio();
+  bleep.src = "laser.mp3";
+  </script>
+  </head>
+
+<body style='margin : 0px; overflow: hidden;'>
+<p id = "score" style = "font-size: 20pt; z-index: 60000; margin-left: 20px; color: white; font-weight: bold; margin-top: 8px; margin-bottom: 20px;">
+Score:	0
+	</p>
+    <center class="cursor">
+  <img id = "boom" style = "z-index: 59999; margin-top: 120px; margin-bottom: 70px; height: 100px; width: 100px" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Crosshairs_Red.svg/2000px-Crosshairs_Red.svg.png"></img>
+  <p id = "outofdom" style = "font-size: 45pt; z-index: 60000; position: fixed; margin-left: 7px; top: 125px; width: 100%; text-align: center"
+	</center>
+  <center> <button  onclick="shoot()" class="w3-button w3-xlarge w3-circle w3-red w3-card-4" style="z-index: 70000; margin-top: 20px; margin-bottom: 20px; ">+</button></center>
+  <button onclick ="emojis = ['🏆']" style = "z-index: 60000; position: fixed; font-size: 20pt; left: 6px; bottom: 6px">
+		🏆
+	</button>
+  <a-scene embedded arjs='debugUIEnabled: false'>
+    <script>
+			var name = "";
+			$( document ).ready(function() {
+   name = prompt("What's your name, soldier?")
+});
+			var score = 0;
+			var uuid = Math.floor(100000000 + Math.random() * 900000000);
+			var emojiList = "😊 😀 😃 😄 😁 😆 😅 😂 ☺️ 😊 😇 😉 😌 😍 😘 😗 😙 😚 😋 😜 😝 😛 😎 😏 😒 😞 😔 😟 😕 😣 😖 😫 😩 😤 😠 😡 😶 😐 😑 😯 😦 😧 😮 😲 😵 😳 😱 😨 😰 😢 😥 😭 😓 😪 😴 😬 😷 😈 👿 👹 👺 💩"
+      var emojis = emojiList.split(" ");
+			function shoot() {
+				score = score + 1;
+
+				var emoji =  emojis[Math.floor(Math.random()*emojis.length)];
+				document.getElementById('outofdom').innerHTML =	emoji;
+			setTimeout(function(){	document.getElementById('boom').style.height = "115px"
+				document.getElementById('boom').style.width = "115px"
+				document.getElementById('outofdom').style.fontsize ="50pt"
+					bleep.play()
+													 }, 80)
+				setTimeout(function(){document.getElementById('boom').style.height = "100px"
+							document.getElementById('outofdom').style.fontsize =	"40pt";
+				document.getElementById('boom').style.width = "100px"}, 250);
+				document.getElementById('score').innerHTML = "Score: " + score;
+					setTimeout(function(){document.getElementById('outofdom').innerHTML =	""}, 300)
+ firebase.database().ref('users/' + uuid).set({
+    username: name,
+    score: score,
+  });
+
+     //  setTimeout(function(){  $('#yo').innerHTML = `<p id = "yourElement" style = "z-index: 60000; margin-top: 20px; margin-bottom: 0px; font-size: 100pt">😊</p> `}, 3000);
+}
+    </script>
+
+    <a-camera-static/>
+	</a-scene>
+</body>
+  </head>
